@@ -1,10 +1,9 @@
 const board = document.querySelector("#board");
 
-const cell = (id) => {
-  return `<div class="cell" id="${id}"></div>`;
-};
-
 function createBoard() {
+  const cell = (id) => {
+    return `<div class="cell" id="${id}"></div>`;
+  };
   board.appendChild(
     document
       .createRange()

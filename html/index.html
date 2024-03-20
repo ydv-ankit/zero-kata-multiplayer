@@ -9,11 +9,21 @@
   <body>
     <div class="container">
       <h1>Tic Tac Toe</h1>
+      <span>Hello, <span id="name"></span></span>
+      <span>Room ID: <span id="roomid"></span></span>
+      <span>Player: <span id="player"></span></span>
       <div class="board" id="board"></div>
       <div id="winningMessage"><span id="winner"></span></div>
-      <div class="reset"><button>Play Again</button></div>
+      <div id="reset"><button>Play Again</button></div>
+      <div id="joinroom">Join Room</div>
     </div>
-    <script src="/board.js"></script>
-    <script src="/logic.js"></script>
+    <script src="/board.js" type="module"></script>
+    <script src="/logic.js" type="module"></script>
+    <!-- <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      console.log(socket);
+    </script> -->
+    <script type="module" src="/socketEvents.js"></script>
   </body>
 </html>
