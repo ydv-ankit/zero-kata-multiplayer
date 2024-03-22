@@ -23,15 +23,15 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     socket.roomId = roomId;
     console.log(socket.rooms);
-    socket.to(roomId).emit("user-connected", username);
+    socket.broadcast.to(roomId).emit("user-connected");
   });
   socket.on("move", (data) => {
     console.log(data);
-    socket.to(data.roomId).emit("move", data);
-  })
-  socket.on("disconnect", () => {
-    console.log("user disconnected: ", socket.roomId);
-    socket.to(socket.roomId).emit("user-left");
+    socket.to(data?.roomId).emit("move", data);
+  });
+  socket.on("disconnect", (roomId, username) => {
+    console.log("user disconnected: " + username);
+    socket.to(roomId).emit("user-left");
   });
 });
 

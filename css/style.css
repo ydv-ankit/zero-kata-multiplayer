@@ -52,7 +52,7 @@ body {
   background-color: rgb(6, 6, 194);
 }
 
-#joinroom{
+#joinroom {
   margin: 20px 0;
   border: 2px solid blue;
   outline: none;
@@ -60,4 +60,12 @@ body {
   padding: 4px;
   cursor: pointer;
   border-radius: 10px;
+}
+
+.player-o {
+  background-color: burlywood;
+}
+
+.player-x {
+  background-color: lightcoral;
 }

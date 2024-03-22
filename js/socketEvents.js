@@ -1,5 +1,5 @@
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
-import { togglePlayer, toggleCell, checkWinner, removeListeners } from "./logic.js";
+import { checkWinner, isPlayable, toggleCell, togglePlayer } from "./logic.js";
 const name = document.getElementById("name");
 const room = document.getElementById("roomid");
 
@@ -33,6 +33,12 @@ socket.on("user-left", () => {
   alert("player left");
 });
 
+// user status
+function togglePlayerStatus(status) {
+  const playerStatus = document.getElementById("playerStatus");
+  playerStatus.innerHTML = status;
+}
+
 // move event
 export function emitMoveEvent(cellId, cellContent) {
   console.log(cellId, cellContent);
@@ -42,7 +48,6 @@ export function emitMoveEvent(cellId, cellContent) {
 socket.on("move", (data) => {
   console.log(data);
   const cell = document.getElementById(data.cellId);
-  console.log(cell);
   cell.innerHTML = data.cellContent;
   cell.removeEventListener("click", toggleCell);
   togglePlayer();
@@ -50,10 +55,12 @@ socket.on("move", (data) => {
   if (winner) {
     removeListeners();
     document.getElementById("winner").innerHTML = `Winner: ${winner}`;
+    return;
   }
+  isPlayable = true;  
 });
 
 // user(opponent) connected
-socket.on("user-connected", (username) => {
-  console.log(username, "connected");
+socket.on("user-connected", () => {
+  togglePlayerStatus("connected");
 });

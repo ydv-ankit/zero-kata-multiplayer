@@ -1,5 +1,3 @@
-// Description: This file contains the game logic for the tic-tac-toe game.
-// imports
 import { emitMoveEvent } from "./socketEvents.js";
 
 // get elements
@@ -8,7 +6,8 @@ const winner = document.getElementById("winner");
 const playerTurn = document.getElementById("player");
 const reset = document.getElementById("reset");
 
-let player = "X";
+export let player = "X";
+export let isPlayable = true;
 
 // toggle player
 export const togglePlayer = () => {
@@ -44,20 +43,20 @@ export function checkWinner() {
 
 // toggle cell content and player
 export function toggleCell(e) {
-  if (e.target.innerHTML === "") {
-    player === "X" ? (e.target.innerHTML = "X") : (e.target.innerHTML = "O");
-    player === "X"
-      ? e.target.classList.add("player-x")
-      : e.target.classList.add("player-o");
+  console.log(e);
+  if(winner.innerHTML !== "") return;
+  if (e?.target?.innerHTML === "" && isPlayable) {
+    e.target.innerHTML = player;
     e.target.removeEventListener("click", e);
     emitMoveEvent(e.target.id, e.target.innerHTML);
     const winner = checkWinner();
     if (winner) {
-      removeListeners();
       document.getElementById("winner").innerHTML = `Winner: ${winner}`;
+      removeListeners();
       return;
     }
     togglePlayer();
+    isPlayable = false;
   }
 }
 
@@ -69,7 +68,7 @@ export function removeListeners() {
 }
 
 // attach event listener to each cell
-function addListeners() {
+export function addListeners() {
   Object.keys(cells).forEach((key) => {
     cells[key].addEventListener("click", toggleCell);
   });
@@ -77,9 +76,9 @@ function addListeners() {
 }
 
 // reset game
-function resetBoard() {
+export function resetBoard() {
   Object.keys(cells).forEach((key) => {
-    cells[key].innerHTML = "";
+    cells[key].innerHTML = " ";
     cells[key].classList.remove("player-x");
     cells[key].classList.remove("player-o");
   });
