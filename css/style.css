@@ -69,3 +69,13 @@ body {
 .player-x {
   background-color: lightcoral;
 }
+
+#newroom{
+  margin: 20px 0;
+  border: 2px solid blue;
+  outline: none;
+  background-color: white;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 10px;
+}

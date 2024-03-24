@@ -1,7 +1,15 @@
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
-import { checkWinner, isPlayable, toggleCell, togglePlayer } from "./logic.js";
+import {
+  checkWinner,
+  removeListeners,
+  toggleCell,
+  toggleCreator,
+  togglePlayer,
+  togglePlayerSign,
+} from "./logic.js";
 const name = document.getElementById("name");
 const room = document.getElementById("roomid");
+const newRoomBtn = document.getElementById("newroom");
 
 // global variables
 let roomId = null;
@@ -21,6 +29,7 @@ function getRoomId() {
 // add event listener to join room button
 document.getElementById("joinroom").addEventListener("click", () => {
   roomId = getRoomId();
+  toggleCreator(false);
   if (roomId) {
     room.innerHTML = roomId;
     socket.emit("join-room", { roomId, username });
@@ -57,10 +66,29 @@ socket.on("move", (data) => {
     document.getElementById("winner").innerHTML = `Winner: ${winner}`;
     return;
   }
-  isPlayable = true;  
+});
+
+// join new room
+newRoomBtn.addEventListener("click", () => {
+  togglePlayerSign("X");
+  toggleCreator(true);
+  socket.emit("new-room-join", username);
+});
+
+// room joined
+socket.on("room-joined", (id) => {
+  room.innerHTML = id;
+  roomId = id;
 });
 
 // user(opponent) connected
-socket.on("user-connected", () => {
-  togglePlayerStatus("connected");
+socket.on("user-connected", (users) => {
+  if (users.length === 2) {
+    togglePlayerStatus("connected and playing");
+    togglePlayerSign();
+  } else {
+    togglePlayerStatus("not available");
+    togglePlayerSign();
+    toggleCreator(true);
+  }
 });

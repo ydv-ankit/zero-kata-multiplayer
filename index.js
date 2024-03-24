@@ -15,19 +15,47 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "/html/index.html"));
 });
 
+// rooms with client names
+const rooms = {};
+
+const generateRoomId = () => {
+  return Math.random().toString(36).substring(7);
+};
+
+const addUserToRoom = (username, roomId = generateRoomId()) => {
+  if (rooms[roomId] && rooms[roomId].length < 2) {
+    rooms[roomId].push(username);
+  } else {
+    rooms[roomId] = [username];
+  }
+  console.log(rooms);
+  return roomId;
+};
+
+const getRoomUsers = (roomId) => {
+  return rooms[roomId];
+};
+
 // socket server events
 io.on("connection", (socket) => {
-  console.log("a user connected");
   socket.on("join-room", ({ roomId, username }) => {
-    console.log("user", username, "joined room: ", roomId);
+    console.log("user '" + username + "' joined room: ", roomId);
+    addUserToRoom(username, roomId);
     socket.join(roomId);
     socket.roomId = roomId;
     console.log(socket.rooms);
-    socket.broadcast.to(roomId).emit("user-connected");
+    io.to(roomId).emit("user-connected", getRoomUsers(roomId));
+    console.log(getRoomUsers(roomId));
   });
   socket.on("move", (data) => {
     console.log(data);
     socket.to(data?.roomId).emit("move", data);
+  });
+  socket.on("new-room-join", (username) => {
+    console.log("new room joined by: " + username);
+    const roomId = addUserToRoom(username);
+    socket.join(roomId);
+    socket.emit("room-joined", roomId);
   });
   socket.on("disconnect", (roomId, username) => {
     console.log("user disconnected: " + username);
