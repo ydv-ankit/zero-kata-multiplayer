@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .container {
@@ -11,6 +12,7 @@ body {
   margin-top: 100px;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
 .board {
@@ -34,6 +36,18 @@ body {
   cursor: pointer;
 }
 
+.cell:hover {
+  background-color: #f0f0f0;
+  scale: 1.04;
+} 
+
+.options{
+  max-width: 600px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 #reset {
   margin: 20px 0;
 }
@@ -47,9 +61,11 @@ body {
   padding: 5px 10px;
   cursor: pointer;
   font-weight: 700;
+  transition: 0.4s;
 }
 #reset button:hover {
-  background-color: rgb(6, 6, 194);
+  transition: 0.4s;
+  scale: 1.1;
 }
 
 #joinroom {
@@ -60,6 +76,14 @@ body {
   padding: 4px;
   cursor: pointer;
   border-radius: 10px;
+  transition: 0.3s;
+}
+
+#joinroom:hover {
+  background-color: rgb(6, 6, 194);
+  color: white;
+  scale: 1.1;
+  transition: 0.4s;
 }
 
 .player-o {
@@ -71,11 +95,28 @@ body {
 }
 
 #newroom{
-  margin: 20px 0;
+  margin: 20px 10px;
   border: 2px solid blue;
   outline: none;
   background-color: white;
   padding: 4px;
   cursor: pointer;
   border-radius: 10px;
+  transition: 0.3s;
+}
+
+#newroom:hover{
+  background-color: rgb(6, 6, 194);
+  color: white;
+  scale: 1.1;
+  transition: 0.5s;
+}
+
+#name, #roomid, #playerStatus, #player{
+  margin: 20px 0;
+  font-weight: 800;
+}
+
+span{
+  font-weight: 400;
 }
