@@ -2,7 +2,7 @@ import { emitMoveEvent, socket } from "./socketEvents.js";
 
 // get elements
 const cells = document.getElementsByClassName("cell");
-const winner = document.getElementById("winner");
+const winnerText = document.getElementById("winner");
 const playerTurn = document.getElementById("player");
 const reset = document.getElementById("reset");
 
@@ -13,6 +13,7 @@ let isCreator = false;
 // toggle creator
 export const toggleCreator = (value) => {
   isCreator = value;
+  console.log(isCreator);
 };
 
 // toggle player sign
@@ -24,11 +25,25 @@ export const togglePlayerSign = () => {
 // toggle player
 export const togglePlayer = () => {
   player = player === "X" ? "O" : "X";
-  playerTurn.innerHTML = player === playerSign ? "Your Turn" : "Opponent's Turn";
+  playerTurn.innerHTML =
+    player === playerSign ? "Your Turn" : "Opponent's Turn";
 };
 
 // winner logic
 export function checkWinner() {
+  // check for a draw
+  let draw = true;
+  for (let i = 0; i < cells.length; i++) {
+    if (cells[i].innerHTML === "") {
+      draw = false;
+    }
+  }
+  if (draw) {
+    winnerText.innerHTML = "Draw";
+    removeListeners();
+    return;
+  }
+  // check for a winner
   const winningCombos = [
     [0, 1, 2],
     [0, 3, 6],
@@ -52,11 +67,6 @@ export function checkWinner() {
   });
   return winner;
 }
-
-// change playable value
-export const changePlayable = (value) => {
-  playable = value;
-};
 
 // toggle cell content and player
 export function toggleCell(e) {
@@ -102,10 +112,13 @@ export function resetBoard() {
   player = winner.innerHTML === "Winner: X" ? "O" : "X";
   playerTurn.innerHTML = player;
   winner.innerHTML = "";
-  changePlayable(false);
 }
 
-// 
+// play again
+export function playAgain() {
+  resetBoard();
+  socket.emit("play-again", roomId);
+}
 
 // initialize game
 (function init() {

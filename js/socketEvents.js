@@ -81,14 +81,25 @@ socket.on("room-joined", (id) => {
   roomId = id;
 });
 
+// play again event
+socket.on("play-again", () => {
+  const wantToPlay = confirm("Opponent wants to play again?");
+  if (wantToPlay) {
+    resetBoard();
+  }else{
+    socket.emit('disconnect', roomId, username);
+  }
+});
+
 // user(opponent) connected
 socket.on("user-connected", (users) => {
   if (users.length === 2) {
     togglePlayerStatus("connected and playing");
     togglePlayerSign();
+    togglePlayer();
   } else {
     togglePlayerStatus("not available");
-    togglePlayerSign();
     toggleCreator(true);
+    togglePlayerSign();
   }
 });

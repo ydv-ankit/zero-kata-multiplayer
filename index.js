@@ -57,6 +57,12 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     socket.emit("room-joined", roomId);
   });
+
+  // play again
+  socket.on("play-again", (roomId) => {
+    console.log("play again: " + roomId);
+    socket.to(roomId).emit("play-again");
+  });
   socket.on("disconnect", (roomId, username) => {
     console.log("user disconnected: " + username);
     socket.to(roomId).emit("user-left");
